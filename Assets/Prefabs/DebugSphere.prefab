@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4064401027343827970}
   - component: {fileID: 9218475443697758909}
   - component: {fileID: 1522025054765656268}
-  - component: {fileID: 8383313196857132144}
   m_Layer: 0
   m_Name: DebugSphere
   m_TagString: Untagged
@@ -84,20 +83,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8383313196857132144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 740511646481709601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20eafe0b6443dd04b835d7c7658f0b44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _debugSphere: {fileID: 0}
-  _boidSpeed: 5
-  _fovRadius: 0
-  _fovAngle: 0
-  _collisionPoints: 0

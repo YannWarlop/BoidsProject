@@ -97,7 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugSphere: {fileID: 740511646481709601, guid: 88851bf4e53736a40adc3d413bca42db, type: 3}
-  _boidSpeed: 5
+  _boidMoveSpeed: 5
+  _boidTurnSpeed: 0.05
   _fovRadius: 5
-  _fovAngle: 0
-  _collisionPoints: 50
+  _fovAngle: 120
+  _collisionPoints: 100
