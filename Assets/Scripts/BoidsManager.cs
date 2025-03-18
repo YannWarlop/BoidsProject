@@ -10,12 +10,13 @@ public class BoidsManager : MonoBehaviour
     [SerializeField] private int _boidSpanwDelta;
     [SerializeField] private int _boidsAmount;
     
+    private ComputeBuffer _compute;
     private BoidBehaviour[] _boids;
-    private ComputeBuffer _boidsBuffer;
 
-    private void Awake() {
-        //_boids = new BoidBehaviour[_boidsAmount];
-        //_boidsBuffer = new ComputeBuffer(_boidsAmount);
+
+    private void OnEnable() {
+        _boids = new BoidBehaviour[_boidsAmount];
+        _compute = new ComputeBuffer(_boidsAmount, sizeof(float) * _boidsAmount);
         for (int i = 0; i < _boidsAmount; i++)
         {
             Vector3 SpawnPoint = new Vector3(Random.Range(-_boidSpanwDelta, _boidSpanwDelta),
@@ -23,7 +24,12 @@ public class BoidsManager : MonoBehaviour
             Vector3 SpawnAngle = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
             var boid = Instantiate(_boidPrefab, SpawnPoint, Quaternion.Euler(SpawnAngle));
             
-            //_boids[i] = boid.GetComponent<BoidBehaviour>(); // Store Boid in Boidarray to Compute Dispatch
+            _boids[i] = boid.GetComponent<BoidBehaviour>(); // Store Boid in Boidarray to Compute Dispatch
         }
+    }
+
+    private void OnDisable() {
+        _compute.Release();
+        _compute = null;
     }
 }
