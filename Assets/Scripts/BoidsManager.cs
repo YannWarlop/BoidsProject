@@ -16,7 +16,7 @@ public class BoidsManager : MonoBehaviour
 
     private void OnEnable() {
         _boids = new BoidBehaviour[_boidsAmount];
-        _compute = new ComputeBuffer(_boidsAmount, sizeof(float) * _boidsAmount);
+        _compute = new ComputeBuffer(_boidsAmount, sizeof(float) * 3);
         for (int i = 0; i < _boidsAmount; i++)
         {
             Vector3 SpawnPoint = new Vector3(Random.Range(-_boidSpanwDelta, _boidSpanwDelta),

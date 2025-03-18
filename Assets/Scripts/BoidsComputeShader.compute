@@ -1,0 +1,11 @@
+#pragma kernel BoidsInfluenceDirection
+
+struct Boid {
+    float3 meanDirection;
+};
+
+RWStructuredBuffer<Boid> boids;
+[numthreads(8,8,1)]
+void BoidsInfluenceDirection (uint3 id : SV_DispatchThreadID) {
+// https://youtu.be/BrZ4pWwkpto compute buffer mean direction    
+}
