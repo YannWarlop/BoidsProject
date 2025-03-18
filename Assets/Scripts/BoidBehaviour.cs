@@ -24,6 +24,8 @@ public class BoidBehaviour : MonoBehaviour
     private Vector3[] _directions;
     private void Start() {
         //Precalculate Spherical collision points
+        //Could be more optimized if calculated on a single instance instead of every boid
+        //Singleton could be possible
         _directions = new Vector3[_collisionPoints];   
         float angleIncrement = Mathf.PI * 2 * ((1 + Mathf.Sqrt(5)) / 2);
         for (int i = 0; i < _collisionPoints; i++) {
@@ -37,7 +39,7 @@ public class BoidBehaviour : MonoBehaviour
         _currentDirection = transform.forward;
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         //AvoidCollision
         if (Physics.Raycast(transform.position, _currentDirection, _fovRadius)) { //If Obstacle
             _currentDirection = Vector3.Lerp(_currentDirection, FindBestDirection(), _boidTurnSpeed);
