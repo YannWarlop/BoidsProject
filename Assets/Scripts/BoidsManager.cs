@@ -10,13 +10,12 @@ public class BoidsManager : MonoBehaviour
     [SerializeField] private int _boidSpanwDelta;
     [SerializeField] private int _boidsAmount;
     
-    private ComputeBuffer _compute;
+    private ComputeShader _compute;
     private BoidBehaviour[] _boids;
 
 
     private void OnEnable() {
         _boids = new BoidBehaviour[_boidsAmount];
-        _compute = new ComputeBuffer(_boidsAmount, sizeof(float) * 3);
         for (int i = 0; i < _boidsAmount; i++)
         {
             Vector3 SpawnPoint = new Vector3(Random.Range(-_boidSpanwDelta, _boidSpanwDelta),
@@ -28,8 +27,33 @@ public class BoidsManager : MonoBehaviour
         }
     }
 
-    private void OnDisable() {
-        _compute.Release();
-        _compute = null;
+    private void Update()
+    {
+        //Initial Data to compute
+        var boidsData = new BoidData[_boidsAmount];
+        for (int i = 0; i < _boidsAmount; i++) {
+            boidsData[i].position = _boids[i].transform.position;
+            boidsData[i].rawDirection = _boids[i].transform.forward;
+        }
+        //Set Compute
+        var BoidsBuffer = new ComputeBuffer(_boidsAmount, BoidData.DataSize );
+        BoidsBuffer.SetData(boidsData);
+        
+        _compute.SetBuffer(0,"boids", BoidsBuffer);
+        _compute.SetInt("boidsCount", _boidsAmount);
+        
+    }
+    
+    
+    public struct BoidData {
+        public Vector3 position; //Boid Pos
+        public Vector3 rawDirection; //Boid Current Direction
+
+        public Vector3 meanHeading; // Neighboring Boids Mean Direction
+        public Vector3 meanCenter; //Neighboring Boids Mean Position
+
+        int numNeighbors; //Number of Neighboring Boids
+        
+        public static int DataSize => sizeof(float) * 3 * 4 + sizeof(int);
     }
 }

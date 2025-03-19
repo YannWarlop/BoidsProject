@@ -1,11 +1,27 @@
 #pragma kernel BoidsInfluenceDirection
 
+//Strategy
+//All Boid Compute, Collision, And Simulation Goes Here
+//BoidManager Stores Boids and starts this Compute Buffer
+//BoidBehaviour Applies Computed Behaviour calculated Here
+//
+
 struct Boid {
-    float3 meanDirection;
+    float3 position; //Boid Pos
+    float3 rawDirection; //Boid Current Direction
+
+    float3 meanHeading; // Neighboring Boids Mean Direction
+    float3 meanCenter; //Neighboring Boids Mean Position
+
+    int numNeighbors; //Number of Neighboring Boids
 };
 
 RWStructuredBuffer<Boid> boids;
-[numthreads(8,8,1)]
+
+[numthreads(10,1,1)]
 void BoidsInfluenceDirection (uint3 id : SV_DispatchThreadID) {
-// https://youtu.be/BrZ4pWwkpto compute buffer mean direction    
+    Boid boid = boids[id.x];
+    boid.meanHeading = float3 (1,1,1); //Ici process math
+    
+    boids[id.x] = boid; // apply compute
 }

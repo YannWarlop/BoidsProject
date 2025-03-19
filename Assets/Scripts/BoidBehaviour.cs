@@ -6,11 +6,7 @@ using UnityEngine.Animations;
 using UnityEngine.Serialization;
 
 public class BoidBehaviour : MonoBehaviour
-{
-    [Header("Debug")]
-    [SerializeField] private GameObject _debugSphere;
-    
-    [FormerlySerializedAs("_boidSpeed")]
+{ 
     [Header("Attributes")]
     [SerializeField] private float _boidMoveSpeed;
     [Range(0f,1f)] [SerializeField] private float _boidTurnSpeed;
@@ -19,6 +15,7 @@ public class BoidBehaviour : MonoBehaviour
     
     [Header("Attributes - Colllision")]
     [SerializeField] private int _collisionPoints;
+    
 
     private Vector3 _currentDirection;
     private Vector3[] _directions;
