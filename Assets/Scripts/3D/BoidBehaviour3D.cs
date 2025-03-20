@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Serialization;
 
-public class BoidBehaviour : MonoBehaviour
+public class BoidBehaviour3D : MonoBehaviour
 { 
     [Header("Attributes")]
     [SerializeField] private float _boidMoveSpeed;

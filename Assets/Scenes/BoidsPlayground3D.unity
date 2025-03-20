@@ -274,7 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boidPrefab: {fileID: 740511646481709601, guid: c28757b9f43dd144d900f657f4f80e0f, type: 3}
   _boidSpanwDelta: 2
-  _boidsAmount: 1000
+  _boidsAmount: 100
 --- !u!4 &852694264
 Transform:
   m_ObjectHideFlags: 0
