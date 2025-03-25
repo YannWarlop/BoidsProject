@@ -42,11 +42,17 @@ public class BoidsManager3D : MonoBehaviour
         boidsShader.SetBuffer(0, "DataStruct", boidsBuffer); //Get Buffer in Shader
         int _threadGroups = Mathf.CeilToInt(_boidsAmount / _shaderThreadSize); //Get ThreadGroupSize
         boidsShader.Dispatch(0, _threadGroups, 1, 1); //Dispatch (Values are to be tested)
-        
-        
+        //COMPUTE DATA
+        boidsBuffer.GetData(boidsData); // Get Computed Data
+        for (int i = 0; i < _boidsAmount; i++) { //Copy Computed Data in Boids
+            _boidsArray[i].position = boidsData[i].position;
+            _boidsArray[i].direction = boidsData[i].direction;
+
+            _boidsArray[i].ActualizeData(); //Make Boid Refresh data and update Behaviour
+        }
+        boidsBuffer.Release(); // Release Buffer
     }
-
-
+    
     public struct BoidData {
         public Vector3 position; //BoidPosition
         public Vector3 direction; //Boid Direction
