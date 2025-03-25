@@ -7,6 +7,9 @@ using UnityEngine.Serialization;
 
 public class BoidBehaviour3D : MonoBehaviour
 { 
+    public Vector3 position;
+    public Vector3 direction;
+    
     [Header("Attributes")]
     [SerializeField] private float _boidMoveSpeed;
     [Range(0f,1f)] [SerializeField] private float _boidTurnSpeed;
