@@ -96,8 +96,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20eafe0b6443dd04b835d7c7658f0b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boidMoveSpeed: 5
-  _boidTurnSpeed: 0.1
+  position: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 0}
+  nearbyBoids: 0
+  alignementHeading: {x: 0, y: 0, z: 0}
+  avoidanceHeading: {x: 0, y: 0, z: 0}
+  centerOfMass: {x: 0, y: 0, z: 0}
+  _boidMoveSpeed: 1
+  _boidTurnSpeed: 0.02
   _fovRadius: 5
   _fovAngle: 120
   _collisionPoints: 100

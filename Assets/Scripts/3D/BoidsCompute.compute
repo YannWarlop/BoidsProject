@@ -14,11 +14,11 @@ struct BoidData {
 
 RWStructuredBuffer<BoidData> boids; //RWBuffer Get and Set Data
 int _boidsAmount;
-int _shaderThreadSize;
+int _shaderThreadSize = 1024;
 float _detectRadius;
 float _avoidRadius;
 
-[numthreads(_shaderThreadSize,1,1)]
+[numthreads(1024,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID) {
     for (int indexY = 0; indexY < _boidsAmount; indexY++) { //Runthrough IDs in IDY
         if (id.x != indexY) { //If IDY other than current ID (IDY is another Boid)

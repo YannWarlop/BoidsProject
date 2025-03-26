@@ -7,13 +7,13 @@ public class BoidsManager3D : MonoBehaviour
     [Header("BoidsSpawn")] 
     //Related to Spawning the Boids
     [SerializeField] private GameObject _boidPrefab; //Boid Prefab
-    [SerializeField] private int _boidSpanwDelta; //Area in wich to spawn the Boids Randomly
+    [SerializeField] private float _boidSpanwDelta; //Area in wich to spawn the Boids Randomly
     [SerializeField] private int _boidsAmount; //Amount of Boids to Spawn
     
     [Header("BoidBuffer")]
     //Related to the Boid Compute Buffer
     [SerializeField] public ComputeShader boidsShader;
-    [SerializeField] const int _shaderThreadSize = 1024;
+    const int _shaderThreadSize = 1024;
     private BoidBehaviour3D[] _boidsArray; //Stored array containing all Boids
     //Boid data struct located at the bottom of the file
     
@@ -23,7 +23,11 @@ public class BoidsManager3D : MonoBehaviour
             Vector3 spawnPoint = new Vector3(Random.Range(-_boidSpanwDelta, _boidSpanwDelta),
                 Random.Range(-_boidSpanwDelta, _boidSpanwDelta), Random.Range(-_boidSpanwDelta, _boidSpanwDelta));
             Vector3 spawnAngle = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-            Instantiate(_boidPrefab, spawnPoint, Quaternion.Euler(spawnAngle));
+            GameObject Boid = Instantiate(_boidPrefab, spawnPoint, Quaternion.Euler(spawnAngle));
+            var _boidbehaviour = Boid.GetComponent<BoidBehaviour3D>();
+            _boidbehaviour.position = spawnPoint;
+            _boidbehaviour.direction = Boid.transform.forward;
+
         }
         //GET IN ARRAY
         _boidsArray = FindObjectsOfType<BoidBehaviour3D>(); //Get BoidsBehaviour
@@ -39,14 +43,14 @@ public class BoidsManager3D : MonoBehaviour
         ComputeBuffer boidsBuffer = new ComputeBuffer(_boidsAmount, BoidData.Size); //Create Buffer
         boidsBuffer.SetData(boidsData); //Set Buffer Data
         
-        boidsShader.SetBuffer(0, "BoidData", boidsBuffer); //Get Buffer in Shader
+        boidsShader.SetBuffer(0, "boids", boidsBuffer); //Get Buffer in Shader
         boidsShader.SetInt("_boidsAmount", _boidsAmount); 
         boidsShader.SetInt("_shaderThreadSize", _shaderThreadSize);
         boidsShader.SetFloat("_detectRadius", 5);
         boidsShader.SetFloat("_avoidRadius", 0.5f);
         
         
-        int _threadGroups = Mathf.CeilToInt(_boidsAmount / _shaderThreadSize); //Get ThreadGroupSize
+        int _threadGroups = Mathf.CeilToInt((float)_boidsAmount / (float)_shaderThreadSize); //Get ThreadGroupSize
         boidsShader.Dispatch(0, _threadGroups, 1, 1); //Dispatch (Values are to be tested)
         //COMPUTE DATA
         boidsBuffer.GetData(boidsData); // Get Computed Data
@@ -54,11 +58,11 @@ public class BoidsManager3D : MonoBehaviour
             _boidsArray[i].position = boidsData[i].position;
             _boidsArray[i].direction = boidsData[i].direction;
             
-            int nearbyBoids; 
-            float3 alignementHeading;
-            float3 avoidanceHeading;
-            float3 centerOfMass;
-
+            _boidsArray[i].nearbyBoids = boidsData[i].nearbyBoids;
+            _boidsArray[i].alignementHeading = boidsData[i].alignementHeading;
+            _boidsArray[i].avoidanceHeading = boidsData[i].avoidanceHeading;
+            _boidsArray[i].centerOfMass = boidsData[i].centerOfMass;
+            
             _boidsArray[i].ActualizeData(); //Make Boid Refresh data and update Behaviour
         }
         boidsBuffer.Release(); // Release Buffer

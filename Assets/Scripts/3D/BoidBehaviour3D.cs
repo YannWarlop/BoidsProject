@@ -7,8 +7,15 @@ using UnityEngine.Serialization;
 
 public class BoidBehaviour3D : MonoBehaviour
 { 
+    //Compute Shader Data
     public Vector3 position;
     public Vector3 direction;
+    
+    //Compute Shader Update
+    public int nearbyBoids; // Number of Boids in Sphere of influence
+    public Vector3 alignementHeading; //MeanDir of Boids in SOI
+    public Vector3 avoidanceHeading; //Avoidance of Boids too Close
+    public Vector3 centerOfMass; //MeanPos of Boids in SOI
     
     [Header("Attributes")]
     [SerializeField] private float _boidMoveSpeed;
@@ -42,23 +49,24 @@ public class BoidBehaviour3D : MonoBehaviour
         _currentDirection = transform.forward;
     }
 
-    private void FixedUpdate() {
-        //AvoidCollision
-        if (Physics.Raycast(transform.position, _currentDirection, _fovRadius)) { //If Obstacle
-            _currentDirection = Vector3.Lerp(_currentDirection, FindBestDirection(), _boidTurnSpeed);
-        } else {
-            Debug.DrawRay(transform.position, _currentDirection * _fovRadius, Color.green);
-        }
-        //Match Speed
-        
-        //Target Center
-        
-        //Target Object
-        
-        //MoveForward
-        transform.position += _currentDirection * _boidMoveSpeed * Time.deltaTime;
-        transform.LookAt(transform.position + _currentDirection);
-    }
+    // private void FixedUpdate() {
+    //     //AvoidCollision
+    //     if (Physics.Raycast(transform.position, _currentDirection, _fovRadius)) { //If Obstacle
+    //         _currentDirection = Vector3.Lerp(_currentDirection, FindBestDirection(), _boidTurnSpeed);
+    //     } else {
+    //         Debug.DrawRay(transform.position, _currentDirection * _fovRadius, Color.green);
+    //         
+    //     }
+    //     //Match direction
+    //     
+    //     //Target Center
+    //     
+    //     //Target Object
+    //     
+    //     //MoveForward
+    //     transform.position += _currentDirection * _boidMoveSpeed * Time.deltaTime;
+    //     transform.LookAt(transform.position + _currentDirection);
+    // }
 
     private Vector3 FindBestDirection() {
         //Plot points on Sphere
@@ -84,7 +92,17 @@ public class BoidBehaviour3D : MonoBehaviour
 
     public void ActualizeData()
     {
+        Debug.Log("actualizing data");
+        Debug.DrawRay(transform.position, _currentDirection * _fovRadius, Color.green);
+        Debug.DrawRay(transform.position, alignementHeading * _fovRadius, Color.red);
+        _currentDirection = Vector3.Lerp(_currentDirection, alignementHeading, _boidTurnSpeed);
+        transform.position += _currentDirection * _boidMoveSpeed * Time.deltaTime;
+        transform.LookAt(transform.position + _currentDirection);
         
+
+
+        position += transform.position;
+        direction = transform.forward;
     }
 }
 
