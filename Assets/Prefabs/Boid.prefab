@@ -103,7 +103,7 @@ MonoBehaviour:
   avoidanceHeading: {x: 0, y: 0, z: 0}
   centerOfMass: {x: 0, y: 0, z: 0}
   _boidMoveSpeed: 1
-  _boidTurnSpeed: 0.02
+  _boidTurnSpeed: 0.01
   _fovRadius: 5
   _fovAngle: 120
   _collisionPoints: 100
