@@ -1,0 +1,44 @@
+#pragma kernel CSMain
+
+struct BoidData {
+    //Own Boid
+    float3 position; //BoidPosition
+    float3 direction; //Boid Direction
+
+    //BoidsCompute
+    int nearbyBoids; // Number of Boids in Sphere of influence
+    float3 alignementHeading; //MeanDir of Boids in SOI
+    float3 avoidanceHeading; //Avoidance of Boids too Close
+    float3 centerOfMass; //MeanPos of Boids in SOI
+};
+
+RWStructuredBuffer<BoidData> boids; //RWBuffer Get and Set Data
+int _boidsAmount;
+int _shaderThreadSize;
+float _detectRadius;
+float _avoidRadius;
+
+[numthreads(_shaderThreadSize,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID) {
+    for (int indexY = 0; indexY < _boidsAmount; indexY++) { //Runthrough IDs in IDY
+        if (id.x != indexY) { //If IDY other than current ID (IDY is another Boid)
+            BoidData boidY = boids[indexY]; //Get BoidY
+            float3 deltaPos = boidY.position - boids[id.x].direction; //Position Difference
+            float sqrDist = deltaPos.x * deltaPos.x + deltaPos.y * deltaPos.y + deltaPos.z * deltaPos.z;
+
+            if (sqrDist < _detectRadius * _detectRadius) { //If BoidY in SOI
+                boids[id.x].nearbyBoids++; //Increment Nearby Boids Tracker
+                boids[id.x].alignementHeading += boidY.direction;
+                boids[id.x].centerOfMass += boidY.position;
+                //Maybe try prioritize nearest boids :
+                //boids[id.x].alignmentHeading += boidy.direction * 1/sqrDist
+                //Another increment of += 1/sqrDist would be needed for final mean
+                //TBT
+
+                if (sqrDist < _avoidRadius * _avoidRadius) { //Square the Radius to avoid SquareRoot Coputation Cost
+                    boids[id.x].avoidanceHeading -= deltaPos / sqrDist;
+                }
+            }
+        }
+    }
+}

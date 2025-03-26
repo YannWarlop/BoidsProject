@@ -39,7 +39,13 @@ public class BoidsManager3D : MonoBehaviour
         ComputeBuffer boidsBuffer = new ComputeBuffer(_boidsAmount, BoidData.Size); //Create Buffer
         boidsBuffer.SetData(boidsData); //Set Buffer Data
         
-        boidsShader.SetBuffer(0, "DataStruct", boidsBuffer); //Get Buffer in Shader
+        boidsShader.SetBuffer(0, "BoidData", boidsBuffer); //Get Buffer in Shader
+        boidsShader.SetInt("_boidsAmount", _boidsAmount); 
+        boidsShader.SetInt("_shaderThreadSize", _shaderThreadSize);
+        boidsShader.SetFloat("_detectRadius", 5);
+        boidsShader.SetFloat("_avoidRadius", 0.5f);
+        
+        
         int _threadGroups = Mathf.CeilToInt(_boidsAmount / _shaderThreadSize); //Get ThreadGroupSize
         boidsShader.Dispatch(0, _threadGroups, 1, 1); //Dispatch (Values are to be tested)
         //COMPUTE DATA
@@ -47,6 +53,11 @@ public class BoidsManager3D : MonoBehaviour
         for (int i = 0; i < _boidsAmount; i++) { //Copy Computed Data in Boids
             _boidsArray[i].position = boidsData[i].position;
             _boidsArray[i].direction = boidsData[i].direction;
+            
+            int nearbyBoids; 
+            float3 alignementHeading;
+            float3 avoidanceHeading;
+            float3 centerOfMass;
 
             _boidsArray[i].ActualizeData(); //Make Boid Refresh data and update Behaviour
         }
@@ -54,9 +65,16 @@ public class BoidsManager3D : MonoBehaviour
     }
     
     public struct BoidData {
+        //Own Boid
         public Vector3 position; //BoidPosition
         public Vector3 direction; //Boid Direction
+
+        //BoidsCompute
+        public int nearbyBoids; // Number of Boids in Sphere of influence
+        public Vector3 alignementHeading; //MeanDir of Boids in SOI
+        public Vector3 avoidanceHeading; //Avoidance of Boids too Close
+        public Vector3 centerOfMass; //MeanPos of Boids in SOI
         
-        public static int Size => sizeof(float) * 3 * 2; //Byte Size of Struct
+        public static int Size => sizeof(float) * 3 * 5 + sizeof(int); //Byte Size of Struct
     }
 }

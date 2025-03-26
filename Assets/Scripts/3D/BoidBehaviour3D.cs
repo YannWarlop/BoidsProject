@@ -14,10 +14,13 @@ public class BoidBehaviour3D : MonoBehaviour
     [SerializeField] private float _boidMoveSpeed;
     [Range(0f,1f)] [SerializeField] private float _boidTurnSpeed;
     [SerializeField] private float _fovRadius;
+    
     [SerializeField] private float _fovAngle;
     
     [Header("Attributes - Colllision")]
     [SerializeField] private int _collisionPoints;
+    
+    
     
 
     private Vector3 _currentDirection;
@@ -77,6 +80,11 @@ public class BoidBehaviour3D : MonoBehaviour
         }
         Debug.DrawRay(transform.position, bestDirection * _fovRadius, Color.green);
         return bestDirection; //No clear so retun biggest distance before impact
+    }
+
+    public void ActualizeData()
+    {
+        
     }
 }
 
