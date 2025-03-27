@@ -96,8 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20eafe0b6443dd04b835d7c7658f0b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boidSpeed: 1
-  _meanDirForce: 0.2
+  _boidSpeed: 2
+  _meanDirForce: 0
+  _colAvoidForce: 0.01
+  _fovRadius: 5
   position: {x: 0, y: 0, z: 0}
   direction: {x: 0, y: 0, z: 0}
-  meanSOIDirection: {x: 1, y: 0, z: 0}
+  meanSOIDirection: {x: 0, y: 0, z: 0}
+  _collisionNumbers: 100

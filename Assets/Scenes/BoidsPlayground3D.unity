@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 740511646481709601, guid: c28757b9f43dd144d900f657f4f80e0f, type: 3}
-  boidCount: 5
+  boidCount: 1
   boidSpawnRadius: 2
 --- !u!4 &852694264
 Transform:
